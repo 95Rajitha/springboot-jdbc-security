@@ -1,0 +1,48 @@
+here for the purpose we are using an embeded database by adding dependencies for
+H2 database
+and also use JDBC Api dependencies
+
+
+in the practical which is doing default configuration of schema in the h2database
+how the defaul comfiguration do the database config in MySQL
+>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
+https://docs.spring.io/spring-security/site/docs/current/reference/html5/#user-schema
+
+
+
+create table users(
+    username varchar_ignorecase(50) not null primary key,
+    password varchar_ignorecase(50) not null,
+    enabled boolean not null
+);
+
+create table authorities (
+    username varchar_ignorecase(50) not null,
+    authority varchar_ignorecase(50) not null,
+    constraint fk_authorities_users foreign key(username) references users(username)
+);
+create unique index ix_auth_username on authorities (username,authority);
+
+
+
+ oracle database config in the link
+
+ so now we are going to take the  sa,e default config out and do the query by our own in a seperate file
+ which we can move away from the default cinfig of query and do our own way
+ for that we are going to do it as below
+            1> make a file called schema.sql in the resource folder
+            2> basically you can create ddl schema and save it into the schema.sql file and when the spring boot start the application and it is going to run those commands and setup the schema this is a place u can setup your database
+            3> past the default config in the above link in the schema.sql
+            4> in oder to add data to the above tables we need to run the data population queries and so that we can create another file in the same path where inside the resource folder and name it as data.sql and paste the following populating queries
+                INSERT INTO users (username,password,enabled)
+                                values('user','123',true);
+                INSERT INTO users (username,password,enabled)
+                                values('admin','123',true);
+
+                INSERT INTO authorities (username,authority)
+                                values('user','ROLE_USER');
+                INSERT INTO users (username,password,enabled)
+                                values('admin','ROLE_ADMIN');
+            5> run the application and proceed
+
+ on the other hand this is only a default behaviour of the spring security and it is not neccessarily need to be the same schema we are allowed change the schema there are two method calls for that see it in the secCionfif class
